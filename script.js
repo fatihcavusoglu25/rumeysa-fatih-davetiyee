@@ -74,3 +74,9 @@ function toggleMusic(){
         document.getElementById("musicBtn").innerText = "🎵 Müziği Aç";
     }
 }
+window.addEventListener("click", () => {
+    const music = document.getElementById("bgmusic");
+    if (music) {
+        music.play().catch(()=>{});
+    }
+}, { once: true });
