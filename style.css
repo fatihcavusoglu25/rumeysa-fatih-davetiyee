@@ -151,3 +151,16 @@ footer{
         font-size:28px;
     }
 }
+#musicBtn{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#8b6b3f;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:30px;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    font-size:14px;
+}
