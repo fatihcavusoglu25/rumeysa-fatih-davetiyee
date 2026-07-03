@@ -80,3 +80,9 @@ window.addEventListener("click", () => {
         music.play().catch(()=>{});
     }
 }, { once: true });
+setTimeout(()=>{
+    const intro = document.getElementById("intro");
+    if(intro){
+        intro.remove();
+    }
+},3000);
