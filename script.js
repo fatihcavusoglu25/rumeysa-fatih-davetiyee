@@ -90,3 +90,7 @@ setTimeout(()=>{
     const splash = document.getElementById("splash");
     if(splash) splash.remove();
 },3000);
+window.addEventListener("scroll", () => {
+    document.querySelector(".hero").style.transform =
+        `translateY(${window.scrollY * 0.2}px)`;
+});
