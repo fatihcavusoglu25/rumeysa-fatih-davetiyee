@@ -240,3 +240,8 @@ footer{
         visibility:hidden;
     }
 }
+.card{
+    background:rgba(255,255,255,0.6);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.3);
+}
