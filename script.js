@@ -59,3 +59,18 @@ style.innerHTML = `
 }
 `;
 document.head.appendChild(style);
+let musicStarted = false;
+
+function toggleMusic(){
+    const music = document.getElementById("bgmusic");
+
+    if(!musicStarted){
+        music.play();
+        musicStarted = true;
+        document.getElementById("musicBtn").innerText = "🔇 Müziği Kapat";
+    }else{
+        music.pause();
+        musicStarted = false;
+        document.getElementById("musicBtn").innerText = "🎵 Müziği Aç";
+    }
+}
