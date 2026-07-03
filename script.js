@@ -86,3 +86,7 @@ setTimeout(()=>{
         intro.remove();
     }
 },3000);
+setTimeout(()=>{
+    const splash = document.getElementById("splash");
+    if(splash) splash.remove();
+},3000);
