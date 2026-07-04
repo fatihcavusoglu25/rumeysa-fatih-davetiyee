@@ -94,3 +94,24 @@ window.addEventListener("scroll", () => {
     document.querySelector(".hero").style.transform =
         `translateY(${window.scrollY * 0.2}px)`;
 });
+const enterBtn = document.getElementById("enterBtn");
+
+if (enterBtn) {
+    enterBtn.addEventListener("click", () => {
+
+        const splash = document.getElementById("splash");
+
+        splash.style.opacity = "0";
+
+        setTimeout(() => {
+            splash.remove();
+        }, 800);
+
+        const music = document.getElementById("bgmusic");
+
+        if (music) {
+            music.play().catch(() => {});
+        }
+
+    });
+}
