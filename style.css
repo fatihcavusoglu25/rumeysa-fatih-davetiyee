@@ -891,3 +891,34 @@ transform:translateY(-8px);
 box-shadow:0 18px 40px rgba(0,0,0,.12);
 
 }
+.hero-flower{
+
+font-size:70px;
+
+animation:flowerFloat 4s ease-in-out infinite;
+
+margin-bottom:20px;
+
+}
+
+@keyframes flowerFloat{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-12px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
