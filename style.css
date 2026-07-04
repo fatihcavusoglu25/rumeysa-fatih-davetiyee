@@ -1192,3 +1192,47 @@ transform:translateY(0);
 }
 
 }
+button,
+.event-card a,
+.location-card a{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+button::after,
+.event-card a::after,
+.location-card a::after{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:-120%;
+
+width:60%;
+
+height:100%;
+
+background:linear-gradient(90deg,
+transparent,
+rgba(255,255,255,.8),
+transparent);
+
+transform:skewX(-20deg);
+
+transition:1s;
+
+}
+
+button:hover::after,
+.event-card a:hover::after,
+.location-card a:hover::after{
+
+left:180%;
+
+}
