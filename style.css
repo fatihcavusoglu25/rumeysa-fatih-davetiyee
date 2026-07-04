@@ -210,11 +210,13 @@ margin-bottom:40px;
 
 font-family:'Great Vibes',cursive;
 
-font-size:90px;
+font-size:110px;
 
-color:#b08d57;
+font-weight:400;
 
-margin-bottom:20px;
+line-height:1;
+
+margin-bottom:25px;
 
 }
 
@@ -1234,5 +1236,35 @@ button:hover::after,
 .location-card a:hover::after{
 
 left:180%;
+
+}
+.invitation-image{
+
+max-width:520px;
+
+width:90%;
+
+display:block;
+
+margin:45px auto;
+
+border-radius:28px;
+
+border:8px solid rgba(255,255,255,.75);
+
+box-shadow:
+0 25px 60px rgba(0,0,0,.15),
+0 0 0 2px #d4b06a;
+
+transition:.5s;
+
+}
+
+.invitation-image:hover{
+
+transform:scale(1.02);
+
+box-shadow:
+0 35px 70px rgba(0,0,0,.18);
 
 }
