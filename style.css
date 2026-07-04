@@ -644,31 +644,45 @@ padding:70px 20px;
 
 .verse-card{
 
-max-width:1100px;
+max-width:900px;
 
-margin:auto;
+margin:70px auto;
 
-background:white;
+padding:60px;
 
-padding:45px;
+border-radius:35px;
 
-border-radius:30px;
+background:rgba(255,255,255,.78);
 
-box-shadow:0 15px 45px rgba(0,0,0,.08);
+backdrop-filter:blur(20px);
+
+box-shadow:0 20px 55px rgba(0,0,0,.08);
 
 text-align:center;
 
+position:relative;
+
+overflow:hidden;
+
 }
 
-.arabic-verse{
+.verse-card::before{
+
+content:"❦";
+
+position:absolute;
+
+top:20px;
+
+left:50%;
+
+transform:translateX(-50%);
 
 font-size:34px;
 
-line-height:2;
+color:#caa14b;
 
-margin-bottom:20px;
-
-color:#8f6f3d;
+}
 
 font-family:"Amiri",serif;
 
