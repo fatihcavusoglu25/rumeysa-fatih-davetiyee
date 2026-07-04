@@ -634,3 +634,60 @@ font-size:54px;
 }
 
 }
+.verse{
+
+padding:70px 20px;
+
+}
+
+.verse-card{
+
+max-width:1100px;
+
+margin:auto;
+
+background:white;
+
+padding:45px;
+
+border-radius:30px;
+
+box-shadow:0 15px 45px rgba(0,0,0,.08);
+
+text-align:center;
+
+}
+
+.arabic-verse{
+
+font-size:34px;
+
+line-height:2;
+
+margin-bottom:20px;
+
+color:#8f6f3d;
+
+font-family:"Amiri",serif;
+
+}
+
+.verse-card p{
+
+font-size:20px;
+
+line-height:1.9;
+
+margin-bottom:15px;
+
+}
+
+.verse-card span{
+
+font-style:italic;
+
+color:#b08d57;
+
+font-size:18px;
+
+}
