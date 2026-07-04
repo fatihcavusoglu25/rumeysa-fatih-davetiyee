@@ -1282,3 +1282,64 @@ box-shadow:
 0 35px 70px rgba(0,0,0,.18);
 
 }
+/* ===========================
+   MOBILE FIX
+=========================== */
+
+@media (max-width:768px){
+
+.loader-content{
+
+padding:25px;
+
+}
+
+.arabic{
+
+font-size:52px;
+
+line-height:1.6;
+
+word-break:break-word;
+
+overflow-wrap:anywhere;
+
+}
+
+.loader-content h2{
+
+font-size:28px;
+
+}
+
+.loader-content p{
+
+font-size:18px;
+
+line-height:1.8;
+
+padding:0 10px;
+
+}
+
+.loader-content span{
+
+font-size:18px;
+
+}
+
+#startInvitation{
+
+width:90%;
+
+max-width:330px;
+
+padding:18px;
+
+font-size:22px;
+
+border-radius:50px;
+
+}
+
+}
