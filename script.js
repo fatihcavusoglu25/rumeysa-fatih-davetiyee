@@ -1,117 +1,87 @@
 const weddingDate = new Date("2026-08-03T13:30:00").getTime();
 
-/* COUNTDOWN */
+const loader = document.getElementById("loader");
+const startBtn = document.getElementById("startInvitation");
+const music = document.getElementById("bgmusic");
+
+startBtn.addEventListener("click", () => {
+    loader.style.opacity = "0";
+
+    setTimeout(() => {
+        loader.style.display = "none";
+    }, 700);
+
+    music.play().catch(() => {});
+});
+
 function updateCountdown() {
-    const now = new Date().getTime();
+    const now = Date.now();
     const distance = weddingDate - now;
 
     if (distance <= 0) {
-        document.getElementById("timer").innerHTML = "💍 Bugün Bizim Günümüz!";
+        document.getElementById("days").textContent = "0";
+        document.getElementById("hours").textContent = "0";
+        document.getElementById("minutes").textContent = "0";
+        document.getElementById("seconds").textContent = "0";
         return;
     }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    document.getElementById("days").textContent =
+        Math.floor(distance / (1000 * 60 * 60 * 24));
 
-    document.getElementById("timer").innerHTML =
-        `${days} Gün ${hours} Saat ${minutes} Dakika ${seconds} Saniye`;
+    document.getElementById("hours").textContent =
+        Math.floor((distance / (1000 * 60 * 60)) % 24);
+
+    document.getElementById("minutes").textContent =
+        Math.floor((distance / (1000 * 60)) % 60);
+
+    document.getElementById("seconds").textContent =
+        Math.floor((distance / 1000) % 60);
 }
 
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-/* FADE IN EFFECT */
-window.addEventListener("load", () => {
-    document.body.style.opacity = "0";
-    document.body.style.transition = "1.5s ease";
-    setTimeout(() => {
-        document.body.style.opacity = "1";
-    }, 100);
-});
+const petals = document.getElementById("petals");
 
-/* FLOWER EFFECT (basit romantik partikül) */
-function createPetal(){
+function createPetal() {
+
     const petal = document.createElement("div");
+
     petal.innerHTML = "🌸";
+
     petal.style.position = "fixed";
     petal.style.left = Math.random() * 100 + "vw";
-    petal.style.top = "-20px";
-    petal.style.fontSize = Math.random() * 20 + 10 + "px";
-    petal.style.opacity = "0.7";
-    petal.style.animation = "fall 6s linear forwards";
-    document.body.appendChild(petal);
+    petal.style.top = "-50px";
+    petal.style.fontSize = (18 + Math.random() * 18) + "px";
+    petal.style.pointerEvents = "none";
+    petal.style.animation = `fall ${6 + Math.random()*4}s linear forwards`;
 
-    setTimeout(()=>petal.remove(),6000);
+    petals.appendChild(petal);
+
+    setTimeout(() => {
+        petal.remove();
+    }, 10000);
 }
 
 setInterval(createPetal, 500);
 
-/* CSS animation inject */
 const style = document.createElement("style");
+
 style.innerHTML = `
 @keyframes fall{
-    to{
-        transform: translateY(110vh) rotate(360deg);
-        opacity:0;
-    }
+
+0%{
+transform:translateY(-50px) rotate(0deg);
+opacity:1;
+}
+
+100%{
+transform:translateY(110vh) translateX(${Math.random()*200-100}px) rotate(360deg);
+opacity:0;
+}
+
 }
 `;
+
 document.head.appendChild(style);
-let musicStarted = false;
-
-function toggleMusic(){
-    const music = document.getElementById("bgmusic");
-
-    if(!musicStarted){
-        music.play();
-        musicStarted = true;
-        document.getElementById("musicBtn").innerText = "🔇 Müziği Kapat";
-    }else{
-        music.pause();
-        musicStarted = false;
-        document.getElementById("musicBtn").innerText = "🎵 Müziği Aç";
-    }
-}
-window.addEventListener("click", () => {
-    const music = document.getElementById("bgmusic");
-    if (music) {
-        music.play().catch(()=>{});
-    }
-}, { once: true });
-setTimeout(()=>{
-    const intro = document.getElementById("intro");
-    if(intro){
-        intro.remove();
-    }
-},3000);
-setTimeout(()=>{
-    const splash = document.getElementById("splash");
-    if(splash) splash.remove();
-},3000);
-window.addEventListener("scroll", () => {
-    document.querySelector(".hero").style.transform =
-        `translateY(${window.scrollY * 0.2}px)`;
-});
-const enterBtn = document.getElementById("enterBtn");
-
-if (enterBtn) {
-    enterBtn.addEventListener("click", () => {
-
-        const splash = document.getElementById("splash");
-
-        splash.style.opacity = "0";
-
-        setTimeout(() => {
-            splash.remove();
-        }, 800);
-
-        const music = document.getElementById("bgmusic");
-
-        if (music) {
-            music.play().catch(() => {});
-        }
-
-    });
-}
