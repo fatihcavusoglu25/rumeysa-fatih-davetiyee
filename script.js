@@ -85,3 +85,43 @@ opacity:0;
 `;
 
 document.head.appendChild(style);
+/* ===========================
+   PREMIUM ENVELOPE
+=========================== */
+
+const envelopeScreen = document.getElementById("envelopeScreen");
+const envelope = document.querySelector(".envelope");
+const openEnvelope = document.getElementById("openEnvelope");
+
+if (openEnvelope) {
+
+    openEnvelope.addEventListener("click", () => {
+
+        envelope.classList.add("open");
+
+        setTimeout(() => {
+
+            // Zarf kayboluyor
+            envelopeScreen.style.opacity = "0";
+
+            // Arka plandaki davetiye loader'ı da kapat
+            const loader = document.getElementById("loader");
+            if (loader) {
+                loader.style.display = "none";
+            }
+
+            setTimeout(() => {
+                envelopeScreen.remove();
+            }, 1200);
+
+            // Müzik
+            const music = document.getElementById("bgmusic");
+            if (music) {
+                music.play().catch(() => {});
+            }
+
+        }, 900);
+
+    });
+
+}
