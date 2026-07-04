@@ -1130,3 +1130,65 @@ transform:rotate(0deg);
 }
 
 }
+.gold-divider{
+
+margin-top:35px;
+
+font-size:28px;
+
+letter-spacing:18px;
+
+color:#c8a25d;
+
+opacity:.8;
+
+animation:pulseGold 3s ease-in-out infinite;
+
+}
+
+@keyframes pulseGold{
+
+0%{opacity:.4;}
+
+50%{opacity:1;}
+
+100%{opacity:.4;}
+
+}
+.hero,
+.countdown-section,
+.events,
+.locations,
+.parents,
+.notes,
+.closing,
+.verse{
+
+opacity:0;
+
+transform:translateY(40px);
+
+animation:fadeSection 1s forwards;
+
+}
+
+.hero{animation-delay:.2s;}
+.verse{animation-delay:.4s;}
+.countdown-section{animation-delay:.6s;}
+.events{animation-delay:.8s;}
+.locations{animation-delay:1s;}
+.parents{animation-delay:1.2s;}
+.notes{animation-delay:1.4s;}
+.closing{animation-delay:1.6s;}
+
+@keyframes fadeSection{
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
