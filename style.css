@@ -305,3 +305,84 @@ transform:translateY(0);
 }
 
 }
+.hero{
+
+min-height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+padding:40px;
+
+}
+
+.hero-card{
+
+max-width:750px;
+
+width:100%;
+
+background:rgba(255,255,255,.60);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.45);
+
+border-radius:30px;
+
+padding:60px 40px;
+
+box-shadow:0 25px 60px rgba(0,0,0,.08);
+
+text-align:center;
+
+}
+
+.hero-card h1{
+
+font-family:'Great Vibes',cursive;
+
+font-size:72px;
+
+color:#8b6b3f;
+
+margin-bottom:30px;
+
+}
+
+.hero-card span{
+
+font-size:50px;
+
+}
+
+.hero-text{
+
+font-size:22px;
+
+line-height:1.9;
+
+color:#444;
+
+}
+
+.hero-text em{
+
+font-style:italic;
+
+color:#6d5534;
+
+}
+
+.hero-text strong{
+
+display:block;
+
+margin-top:15px;
+
+letter-spacing:2px;
+
+}
