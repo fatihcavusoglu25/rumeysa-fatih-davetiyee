@@ -83,3 +83,29 @@ opacity:0;
 
 }
 `;
+/* ===========================
+   DETAYLARA KAYDIR
+=========================== */
+
+const continueBtn = document.getElementById("continueBtn");
+
+if (continueBtn) {
+
+    continueBtn.addEventListener("click", () => {
+
+        const target = document.querySelector(".events");
+
+        if (target) {
+
+            target.scrollIntoView({
+
+                behavior: "smooth",
+                block: "start"
+
+            });
+
+        }
+
+    });
+
+}
