@@ -85,3 +85,12 @@ opacity:0;
 `;
 
 document.head.appendChild(style);
+document.getElementById("continueBtn").addEventListener("click", () => {
+
+    document.querySelector(".countdown-section").scrollIntoView({
+
+        behavior: "smooth"
+
+    });
+
+});
