@@ -1343,3 +1343,78 @@ border-radius:50px;
 }
 
 }
+/* ===========================
+   DEVAM ET BUTONU
+=========================== */
+
+.continue-section{
+
+text-align:center;
+
+margin:40px auto 70px;
+
+padding:0 20px;
+
+}
+
+.continue-section p{
+
+font-size:18px;
+
+color:#666;
+
+margin-bottom:20px;
+
+line-height:1.7;
+
+}
+
+#continueBtn{
+
+background:linear-gradient(135deg,#b08d57,#d4af37);
+
+color:#fff;
+
+border:none;
+
+padding:16px 42px;
+
+border-radius:50px;
+
+font-size:18px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.35s;
+
+box-shadow:0 15px 35px rgba(176,141,87,.35);
+
+animation:bounceArrow 2s infinite;
+
+}
+
+#continueBtn:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 20px 45px rgba(176,141,87,.45);
+
+}
+
+@keyframes bounceArrow{
+
+0%,100%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(8px);
+
+}
+
+}
