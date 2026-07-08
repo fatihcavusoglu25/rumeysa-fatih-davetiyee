@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rümeysa & Fatih | Admin Panel</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:radial-gradient(circle at top,#fff8ea,#f3eee5);color:#4b3a24;min-height:100vh;padding:24px}
+    .login,.panel{max-width:1100px;margin:40px auto;background:rgba(255,255,255,.86);border:1px solid rgba(196,156,83,.35);border-radius:28px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.10)}
+    h1{color:#9b7438;margin-bottom:14px;font-size:32px}.muted{color:#7d6b55;margin-bottom:18px;line-height:1.6}
+    input,button{width:100%;padding:15px;border-radius:16px;border:1px solid #d9c39b;font-size:16px;margin:8px 0}
+    button{background:linear-gradient(135deg,#b08d57,#d4af37);color:white;font-weight:700;cursor:pointer;border:none}
+    .topbar{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:18px 0 24px}
+    .stat{background:#fffaf2;border:1px solid #e1c991;padding:18px;border-radius:20px;text-align:center}.stat strong{display:block;font-size:30px;color:#9b7438;margin-bottom:6px}
+    .search{max-width:360px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{background:white;border-radius:20px;overflow:hidden;border:1px solid #ead7b5;box-shadow:0 10px 24px rgba(0,0,0,.06)}
+    .thumb{width:100%;height:170px;object-fit:cover;background:#f2eadf;display:block}.info{padding:14px;font-size:14px;line-height:1.6}.info b{color:#8b642c}
+    .actions{display:flex;gap:8px;margin-top:10px}.actions a{flex:1;text-align:center;text-decoration:none;background:#b08d57;color:white;padding:10px;border-radius:12px;font-size:13px;font-weight:700}
+    .hidden{display:none}.error{color:#b00020;margin-top:10px;font-weight:700}
+    @media(max-width:600px){body{padding:12px}.login,.panel{padding:18px;margin:16px auto}h1{font-size:26px}}
+  </style>
+</head>
+<body>
+  <div id="loginBox" class="login">
+    <h1>👑 Fatih Admin Paneli</h1>
+    <p class="muted">Yüklenen fotoğraf ve videoları görmek için şifre gir.</p>
+    <input id="passwordInput" type="password" placeholder="Admin şifresi" />
+    <button id="loginBtn">Giriş Yap</button>
+    <div id="loginError" class="error"></div>
+  </div>
+
+  <div id="panelBox" class="panel hidden">
+    <div class="topbar"><div><h1>📸 Yüklenen Anılar</h1><p class="muted">Misafirlerin yüklediği fotoğraf ve videolar burada görünür.</p></div><button id="refreshBtn" style="max-width:180px;">Yenile</button></div>
+    <div class="stats"><div class="stat"><strong id="totalFiles">0</strong>Toplam Dosya</div><div class="stat"><strong id="totalImages">0</strong>Fotoğraf</div><div class="stat"><strong id="totalVideos">0</strong>Video</div><div class="stat"><strong id="totalGuests">0</strong>Misafir</div></div>
+    <input id="searchInput" class="search" type="text" placeholder="İsme göre ara..." />
+    <br><br><div id="list" class="grid"></div>
+  </div>
+
+<script>
+  const ADMIN_PASSWORD = "250825";
+  const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
+
+  const loginBox = document.getElementById("loginBox");
+  const panelBox = document.getElementById("panelBox");
+  const loginBtn = document.getElementById("loginBtn");
+  const passwordInput = document.getElementById("passwordInput");
+  const loginError = document.getElementById("loginError");
+  const refreshBtn = document.getElementById("refreshBtn");
+  const searchInput = document.getElementById("searchInput");
+  const list = document.getElementById("list");
+  let uploads = [];
+
+  loginBtn.addEventListener("click", () => {
+    if (passwordInput.value === ADMIN_PASSWORD) { sessionStorage.setItem("wedding_admin", "ok"); showPanel(); }
+    else { loginError.textContent = "Şifre yanlış."; }
+  });
+  passwordInput.addEventListener("keydown", e => { if (e.key === "Enter") loginBtn.click(); });
+  refreshBtn.addEventListener("click", loadUploads);
+  searchInput.addEventListener("input", renderUploads);
+  if (sessionStorage.getItem("wedding_admin") === "ok") showPanel();
+
+  function showPanel(){ loginBox.classList.add("hidden"); panelBox.classList.remove("hidden"); loadUploads(); }
+
+  async function loadUploads(){
+    list.innerHTML = "Yükleniyor...";
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/wedding_uploads?select=*&order=uploaded_at.desc`, { headers:{ "apikey":SUPABASE_KEY, "Authorization":`Bearer ${SUPABASE_KEY}` }});
+    if(!response.ok){ list.innerHTML = "Supabase okuma hatası: " + await response.text(); return; }
+    uploads = await response.json(); renderStats(); renderUploads();
+  }
+
+  function renderStats(){
+    const images = uploads.filter(x => x.file_type === "image").length;
+    const videos = uploads.filter(x => x.file_type === "video").length;
+    const guests = new Set(uploads.map(x => (x.guest_name || "İsimsiz").trim()).filter(Boolean));
+    document.getElementById("totalFiles").textContent = uploads.length;
+    document.getElementById("totalImages").textContent = images;
+    document.getElementById("totalVideos").textContent = videos;
+    document.getElementById("totalGuests").textContent = guests.size;
+  }
+
+  function renderUploads(){
+    const q = searchInput.value.toLowerCase().trim();
+    const filtered = uploads.filter(item => (item.guest_name || "İsimsiz").toLowerCase().includes(q));
+    if(filtered.length === 0){ list.innerHTML = "Henüz yükleme yok veya arama sonucu bulunamadı."; return; }
+    list.innerHTML = filtered.map(item => {
+      const name = item.guest_name || "İsimsiz";
+      const date = item.uploaded_at ? new Date(item.uploaded_at).toLocaleString("tr-TR") : "";
+      const isVideo = item.file_type === "video";
+      const media = isVideo ? `<video class="thumb" src="${item.file_url}" controls></video>` : `<img class="thumb" src="${item.file_url}" alt="">`;
+      return `<div class="card">${media}<div class="info"><div><b>👤 Yükleyen:</b> ${escapeHtml(name)}</div><div><b>📁 Dosya:</b> ${escapeHtml(item.file_name || "-")}</div><div><b>🕒 Tarih:</b> ${date}</div><div class="actions"><a href="${item.file_url}" target="_blank">Aç</a><a href="${item.file_url}" download>İndir</a></div></div></div>`;
+    }).join("");
+  }
+  function escapeHtml(text){ return String(text).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+</script>
+</body>
+</html>
