@@ -85,124 +85,83 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const CLOUD_NAME = "z9n2qxfo";
-    const UPLOAD_PRESET = "wedding_upload";
-    const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
+const CLOUD_NAME = "z9n2qxfo";
+const UPLOAD_PRESET = "wedding_upload";
+const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
 
-    const uploadBtn = document.getElementById("uploadBtn");
-    const filesInput = document.getElementById("mediaFiles");
-    const guestNameInput = document.getElementById("guestName");
-    const status = document.getElementById("uploadStatus");
+const uploadBtn = document.getElementById("uploadBtn");
+const filesInput = document.getElementById("mediaFiles");
+const guestNameInput = document.getElementById("guestName");
+const status = document.getElementById("uploadStatus");
 
-    function setStatus(message, type = "info") {
-        if (!status) return;
-        status.className = `upload-status ${type}`;
-        status.innerHTML = message;
-    }
+function setStatus(message) {
+    status.innerHTML = message;
+}
 
-    function uploadToCloudinary(file, onProgress) {
-        return new Promise((resolve, reject) => {
+if (uploadBtn) {
+    uploadBtn.addEventListener("click", async () => {
+        const files = Array.from(filesInput.files || []);
+        const guestName = (guestNameInput.value || "İsimsiz").trim();
+
+        if (files.length === 0) {
+            setStatus("📷 Lütfen dosya seç.");
+            return;
+        }
+
+        setStatus("⬆️ Yükleniyor...");
+
+        for (const file of files) {
             const formData = new FormData();
             formData.append("file", file);
             formData.append("upload_preset", UPLOAD_PRESET);
             formData.append("folder", "fatih-rumeysa");
 
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`);
-
-            xhr.upload.onprogress = (event) => {
-                if (event.lengthComputable && onProgress) {
-                    const percent = Math.round((event.loaded / event.total) * 100);
-                    onProgress(percent);
+            const cloudRes = await fetch(
+                `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
+                {
+                    method: "POST",
+                    body: formData
                 }
-            };
+            );
 
-            xhr.onload = () => {
-                let result = {};
-                try { result = JSON.parse(xhr.responseText); } catch (e) {}
+            const cloudData = await cloudRes.json();
 
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    resolve(result);
-                } else {
-                    reject(new Error(result?.error?.message || "Cloudinary yükleme hatası"));
+            if (!cloudRes.ok) {
+                setStatus("❌ Cloudinary hatası: " + JSON.stringify(cloudData));
+                return;
+            }
+
+            const saveRes = await fetch(
+                `${SUPABASE_URL}/rest/v1/wedding_uploads`,
+                {
+                    method: "POST",
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": `Bearer ${SUPABASE_KEY}`,
+                        "Content-Type": "application/json",
+                        "Prefer": "return=minimal"
+                    },
+                    body: JSON.stringify({
+                        guest_name: guestName,
+                        file_url: cloudData.secure_url,
+                        file_type: file.type.startsWith("video") ? "video" : "image",
+                        file_name: file.name
+                    })
                 }
-            };
+            );
 
-            xhr.onerror = () => reject(new Error("İnternet bağlantısı veya yükleme hatası"));
-            xhr.send(formData);
-        });
-    }
-
-    async function saveToSupabase({ guestName, file, cloudinaryResult }) {
-        const payload = {
-            guest_name: guestName || "İsimsiz Misafir",
-            file_url: cloudinaryResult.secure_url,
-            file_type: cloudinaryResult.resource_type || (file.type.startsWith("video") ? "video" : "image"),
-            file_name: file.name
-        };
-
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/wedding_uploads`, {
-            method: "POST",
-            headers: {
-                "apikey": SUPABASE_KEY,
-                "Authorization": `Bearer ${SUPABASE_KEY}`,
-                "Content-Type": "application/json",
-                "Prefer": "return=minimal"
-            },
-            body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error("Supabase kayıt hatası: " + errorText);
+            if (!saveRes.ok) {
+                const err = await saveRes.text();
+                setStatus("❌ Supabase kayıt hatası: " + err);
+                return;
+            }
         }
-    }
 
-    if (uploadBtn && filesInput) {
-        uploadBtn.addEventListener("click", async () => {
-            const files = Array.from(filesInput.files || []);
-            const guestName = (guestNameInput?.value || "").trim();
-
-            if (files.length === 0) {
-                setStatus("📷 Lütfen en az bir fotoğraf veya video seçin.", "error");
-                return;
-            }
-
-            if (files.length > 15) {
-                setStatus("⚠️ Tek seferde en fazla 15 dosya yükleyebilirsiniz.", "error");
-                return;
-            }
-
-            for (const file of files) {
-                const isVideo = file.type.startsWith("video");
-                const maxSize = isVideo ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
-                if (file.size > maxSize) {
-                    setStatus(`⚠️ ${file.name} çok büyük. Fotoğraf max 10 MB, video max 50 MB olmalı.`, "error");
-                    return;
-                }
-            }
-
-            uploadBtn.disabled = true;
-            uploadBtn.textContent = "Yükleniyor...";
-
-            let uploadedCount = 0;
-            const total = files.length;
-
-            try {
-                for (const file of files) {
-                    setStatus(`⬆️ ${uploadedCount + 1}/${total} yükleniyor: ${file.name}<br><small>%0</small>`, "info");
-
-                    const cloudinaryResult = await uploadToCloudinary(file, (percent) => {
-                        setStatus(`⬆️ ${uploadedCount + 1}/${total} yükleniyor: ${file.name}<br><small>%${percent}</small>`, "info");
-                    });
-
-                    await saveToSupabase({ guestName, file, cloudinaryResult });
-                    uploadedCount++;
-                }
-
-                setStatus(`❤️ Teşekkür ederiz${guestName ? " " + guestName : ""}!<br>${uploadedCount} dosya başarıyla yüklendi.`, "success");
-                filesInput.value = "";
+        setStatus("❤️ Yükleme tamamlandı. Teşekkür ederiz!");
+        filesInput.value = "";
+    });
+}
             } catch (error) {
                 console.error(error);
                 setStatus(`❌ ${error.message}`, "error");
