@@ -109,6 +109,8 @@ if (continueBtn) {
     });
 
 }
+console.log("Upload kodu yüklendi");
+
 const uploadBtn = document.getElementById("uploadBtn");
 
 if (uploadBtn) {
