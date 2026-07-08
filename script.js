@@ -109,3 +109,49 @@ if (continueBtn) {
     });
 
 }
+const uploadBtn = document.getElementById("uploadBtn");
+
+if (uploadBtn) {
+
+    uploadBtn.addEventListener("click", async () => {
+
+        const files = document.getElementById("mediaFiles").files;
+        const guestName = document.getElementById("guestName").value;
+        const status = document.getElementById("uploadStatus");
+
+        if (files.length === 0) {
+            status.innerHTML = "📷 Lütfen en az bir dosya seçin.";
+            return;
+        }
+
+        status.innerHTML = "⬆️ Yükleniyor...";
+
+        for (const file of files) {
+
+            const formData = new FormData();
+
+            formData.append("file", file);
+            formData.append("upload_preset", "wedding_upload");
+            formData.append("folder", "fatih-rumeysa");
+            formData.append("context", `guest=${guestName}`);
+
+            const response = await fetch(
+                "https://api.cloudinary.com/v1_1/z9n2qxfo/auto/upload",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+            if (!response.ok) {
+                status.innerHTML = "❌ Bir hata oluştu.";
+                return;
+            }
+        }
+
+        status.innerHTML =
+            "❤️ Teşekkür ederiz! Fotoğraf ve videolar başarıyla yüklendi.";
+
+    });
+
+}
