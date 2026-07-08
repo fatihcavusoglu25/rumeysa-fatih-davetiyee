@@ -270,8 +270,6 @@ target="_blank">
         08.30
     </p>
 
-</p>
-
 <h3>
 
 Damat Evinde Toplanılacaktır.
@@ -396,10 +394,44 @@ Fatih
 
 </section>
 
-<footer>
+<section class="upload-section" id="upload">
+
+    <div class="upload-card">
+        <div class="upload-icon">📸</div>
+
+        <h2>Anılarınızı Bizimle Paylaşın</h2>
+
+        <p>
+            Çektiğiniz fotoğraf ve videoları bizimle paylaşarak
+            bu özel günü birlikte ölümsüzleştirebilirsiniz 🤍
+        </p>
+
+        <input
+            id="guestName"
+            type="text"
+            placeholder="İsminiz (isteğe bağlı)"
+            autocomplete="name">
+
+        <input
+            id="mediaFiles"
+            type="file"
+            multiple
+            accept="image/*,video/*">
+
+        <button id="uploadBtn" type="button">
+            ❤️ Fotoğraf / Video Yükle
+        </button>
+
+        <div class="upload-progress-wrap" id="uploadProgressWrap" hidden>
+            <div class="upload-progress-bar" id="uploadProgressBar"></div>
+        </div>
+
+        <div id="uploadStatus"></div>
+    </div>
+
+</section>
 
 <footer>
-
 <p>
 
 💍
@@ -421,41 +453,11 @@ duadır."
 Rümeysa ❤️ Fatih
 
 </p>
-
 </footer>
 
-</footer>
 
 <script src="script.js"></script>
 
-    
-    <section class="upload-section">
-
-    <h2>📸 Anılarınızı Bizimle Paylaşın</h2>
-
-    <p>
-        Çektiğiniz fotoğraf ve videoları bizimle paylaşarak
-        bu özel günü birlikte ölümsüzleştirebilirsiniz 🤍
-    </p>
-
-    <input
-        id="guestName"
-        type="text"
-        placeholder="İsminiz (isteğe bağlı)">
-
-    <input
-        id="mediaFiles"
-        type="file"
-        multiple
-        accept="image/*,video/*">
-
-    <button id="uploadBtn">
-        ❤️ Fotoğraf / Video Yükle
-    </button>
-
-    <div id="uploadStatus"></div>
-
-</section>
 </body>
 
 </html>
