@@ -135,18 +135,22 @@ if (uploadBtn) {
             formData.append("folder", "fatih-rumeysa");
             formData.append("context", `guest=${guestName}`);
 
-            const response = await fetch(
-                "https://api.cloudinary.com/v1_1/z9n2qxfo/auto/upload",
-                {
-                    method: "POST",
-                    body: formData
-                }
-            );
+           const response = await fetch(
+    "https://api.cloudinary.com/v1_1/z9n2qxfo/auto/upload",
+    {
+        method: "POST",
+        body: formData
+    }
+);
 
-            if (!response.ok) {
-                status.innerHTML = "❌ Bir hata oluştu.";
-                return;
-            }
+const result = await response.json();
+console.log(result);
+
+if (!response.ok) {
+    console.error(result);
+    status.innerHTML = "❌ " + (result.error?.message || "Yükleme başarısız.");
+    return;
+}
         }
 
         status.innerHTML =
