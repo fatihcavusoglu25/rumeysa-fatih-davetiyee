@@ -1418,3 +1418,65 @@ transform:translateY(8px);
 }
 
 }
+.upload-section{
+
+max-width:700px;
+margin:80px auto;
+padding:35px;
+
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(20px);
+
+border-radius:25px;
+
+text-align:center;
+
+border:1px solid rgba(255,255,255,.15);
+
+}
+
+.upload-section h2{
+
+font-size:34px;
+
+margin-bottom:20px;
+
+}
+
+.upload-section input{
+
+width:100%;
+
+padding:16px;
+
+margin:12px 0;
+
+border:none;
+
+border-radius:15px;
+
+font-size:16px;
+
+}
+
+.upload-section button{
+
+padding:18px 35px;
+
+border:none;
+
+border-radius:18px;
+
+cursor:pointer;
+
+font-size:18px;
+
+}
+
+#uploadStatus{
+
+margin-top:20px;
+
+font-weight:bold;
+
+}
