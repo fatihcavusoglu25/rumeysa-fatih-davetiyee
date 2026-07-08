@@ -1,20 +1,33 @@
 const weddingDate = new Date("2026-08-03T13:30:00").getTime();
 
-const loader = document.getElementById("loader");
-const startBtn = document.getElementById("startInvitation");
-const music = document.getElementById("bgmusic");
+const CLOUD_NAME = "z9n2qxfo";
+const UPLOAD_PRESET = "wedding_upload";
+const CLOUDINARY_FOLDER = "fatih-rumeysa";
+const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
+const MAX_FILES = 15;
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
 
-if (startBtn && loader) {
+function safeText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+function initLoader() {
+    const loader = document.getElementById("loader");
+    const startBtn = document.getElementById("startInvitation");
+    const music = document.getElementById("bgmusic");
+
+    if (!startBtn || !loader) return;
+
     startBtn.addEventListener("click", () => {
         loader.style.opacity = "0";
-
         setTimeout(() => {
             loader.style.display = "none";
         }, 700);
 
-        if (music) {
-            music.play().catch(() => {});
-        }
+        if (music) music.play().catch(() => {});
     });
 }
 
@@ -22,170 +35,81 @@ function updateCountdown() {
     const now = Date.now();
     const distance = weddingDate - now;
 
-    const daysEl = document.getElementById("days");
-    const hoursEl = document.getElementById("hours");
-    const minutesEl = document.getElementById("minutes");
-    const secondsEl = document.getElementById("seconds");
-
-    if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
-
     if (distance <= 0) {
-        daysEl.textContent = "0";
-        hoursEl.textContent = "0";
-        minutesEl.textContent = "0";
-        secondsEl.textContent = "0";
+        safeText("days", "0");
+        safeText("hours", "0");
+        safeText("minutes", "0");
+        safeText("seconds", "0");
         return;
     }
 
-    daysEl.textContent = Math.floor(distance / (1000 * 60 * 60 * 24));
-    hoursEl.textContent = Math.floor((distance / (1000 * 60 * 60)) % 24);
-    minutesEl.textContent = Math.floor((distance / (1000 * 60)) % 60);
-    secondsEl.textContent = Math.floor((distance / 1000) % 60);
+    safeText("days", Math.floor(distance / (1000 * 60 * 60 * 24)));
+    safeText("hours", Math.floor((distance / (1000 * 60 * 60)) % 24));
+    safeText("minutes", Math.floor((distance / (1000 * 60)) % 60));
+    safeText("seconds", Math.floor((distance / 1000) % 60));
 }
 
-updateCountdown();
-setInterval(updateCountdown, 1000);
-
-const petals = document.getElementById("petals");
-
-function createPetal() {
+function initPetals() {
+    const petals = document.getElementById("petals");
     if (!petals) return;
 
-    const petal = document.createElement("div");
+    const style = document.createElement("style");
+    style.innerHTML = `
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) translateX(40px) rotate(360deg); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
 
-    petal.innerHTML = "🌸";
-    petal.style.position = "fixed";
-    petal.style.left = Math.random() * 100 + "vw";
-    petal.style.top = "-50px";
-    petal.style.fontSize = (18 + Math.random() * 18) + "px";
-    petal.style.pointerEvents = "none";
-    petal.style.zIndex = "1";
-    petal.style.animation = `fall ${6 + Math.random() * 4}s linear forwards`;
-
-    petals.appendChild(petal);
-
-    setTimeout(() => {
-        petal.remove();
-    }, 10000);
-}
-
-setInterval(createPetal, 500);
-
-const style = document.createElement("style");
-
-style.innerHTML = `
-@keyframes fall {
-    0% {
-        transform: translateY(-50px) rotate(0deg);
-        opacity: 1;
+    function createPetal() {
+        const petal = document.createElement("div");
+        petal.innerHTML = "🌸";
+        petal.style.position = "fixed";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.top = "-50px";
+        petal.style.fontSize = (18 + Math.random() * 18) + "px";
+        petal.style.pointerEvents = "none";
+        petal.style.zIndex = "2";
+        petal.style.animation = `fall ${6 + Math.random() * 4}s linear forwards`;
+        petals.appendChild(petal);
+        setTimeout(() => petal.remove(), 10000);
     }
 
-    100% {
-        transform: translateY(110vh) translateX(${Math.random() * 200 - 100}px) rotate(360deg);
-        opacity: 0;
-    }
+    setInterval(createPetal, 700);
 }
-`;
 
-document.head.appendChild(style);
+function initContinueButton() {
+    const continueBtn = document.getElementById("continueBtn");
+    if (!continueBtn) return;
 
-/* ===========================
-   DETAYLARA KAYDIR
-=========================== */
-
-const continueBtn = document.getElementById("continueBtn");
-
-if (continueBtn) {
     continueBtn.addEventListener("click", () => {
         const target = document.querySelector(".events");
-
-        if (target) {
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 }
 
-/* ===========================
-   FOTOĞRAF / VİDEO YÜKLEME
-=========================== */
-
-const CLOUDINARY_CLOUD_NAME = "z9n2qxfo";
-const CLOUDINARY_UPLOAD_PRESET = "wedding_upload";
-const MAX_FILE_SIZE_MB = 100;
-
-const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
-const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
-
-const uploadBtn = document.getElementById("uploadBtn");
-const fileInput = document.getElementById("mediaFiles");
-const guestNameInput = document.getElementById("guestName");
-const statusBox = document.getElementById("uploadStatus");
-const progressWrap = document.getElementById("uploadProgressWrap");
-const progressBar = document.getElementById("uploadProgressBar");
-
-function setUploadStatus(message, type = "") {
-    if (!statusBox) return;
-    statusBox.className = type;
-    statusBox.innerHTML = message;
+function getFileType(file) {
+    if (file.type.startsWith("image/")) return "image";
+    if (file.type.startsWith("video/")) return "video";
+    return "other";
 }
 
-function setProgress(percent) {
-    if (!progressWrap || !progressBar) return;
-    progressWrap.hidden = false;
-    progressBar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+function validateFiles(files) {
+    if (!files.length) return "📷 Lütfen en az bir dosya seçin.";
+    if (files.length > MAX_FILES) return `Tek seferde en fazla ${MAX_FILES} dosya yükleyebilirsiniz.`;
+
+    for (const file of files) {
+        const type = getFileType(file);
+        if (type === "other") return `${file.name} desteklenmeyen dosya türü.`;
+        if (type === "image" && file.size > MAX_IMAGE_SIZE) return `${file.name} çok büyük. Fotoğraf en fazla 10 MB olmalı.`;
+        if (type === "video" && file.size > MAX_VIDEO_SIZE) return `${file.name} çok büyük. Video en fazla 50 MB olmalı.`;
+    }
+
+    return null;
 }
 
-function uploadToCloudinary(file, guestName = "") {
-    return new Promise((resolve, reject) => {
-        const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
-        const formData = new FormData();
-
-        formData.append("file", file);
-        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-
-        if (guestName) {
-            formData.append("context", `guest=${guestName}`);
-        }
-
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-
-        xhr.upload.addEventListener("progress", (event) => {
-            if (event.lengthComputable) {
-                const percent = Math.round((event.loaded / event.total) * 100);
-                setProgress(percent);
-            }
-        });
-
-        xhr.onload = () => {
-            let result = {};
-
-            try {
-                result = JSON.parse(xhr.responseText);
-            } catch (error) {
-                reject(new Error("Cloudinary cevabı okunamadı."));
-                return;
-            }
-
-            if (xhr.status >= 200 && xhr.status < 300) {
-                resolve(result);
-            } else {
-                reject(new Error(result.error?.message || "Yükleme başarısız oldu."));
-            }
-        };
-
-        xhr.onerror = () => {
-            reject(new Error("Bağlantı hatası oluştu."));
-        };
-
-        xhr.send(formData);
-    });
-}
-
-async function saveUploadRecord({ guestName, fileUrl, fileType, fileName }) {
+async function saveToSupabase(payload) {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/wedding_uploads`, {
         method: "POST",
         headers: {
@@ -194,77 +118,100 @@ async function saveUploadRecord({ guestName, fileUrl, fileType, fileName }) {
             "Content-Type": "application/json",
             "Prefer": "return=minimal"
         },
-        body: JSON.stringify({
-            guest_name: guestName || "İsimsiz",
-            file_url: fileUrl,
-            file_type: fileType || "unknown",
-            file_name: fileName || ""
-        })
+        body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Supabase kaydı yapılamadı: ${errorText}`);
+        throw new Error("Supabase kaydı başarısız: " + errorText);
     }
 }
 
-if (uploadBtn && fileInput) {
+async function uploadFileToCloudinary(file, guestName) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+    formData.append("folder", CLOUDINARY_FOLDER);
+    formData.append("context", `guest=${guestName || "Misafir"}`);
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {
+        method: "POST",
+        body: formData
+    });
+
+    const result = await response.json();
+    if (!response.ok) {
+        throw new Error(result.error?.message || "Cloudinary yükleme başarısız.");
+    }
+
+    return result;
+}
+
+function initUpload() {
+    const uploadBtn = document.getElementById("uploadBtn");
+    const filesInput = document.getElementById("mediaFiles");
+    const nameInput = document.getElementById("guestName");
+    const status = document.getElementById("uploadStatus");
+
+    if (!uploadBtn || !filesInput || !nameInput || !status) return;
+
     uploadBtn.addEventListener("click", async () => {
-        const files = Array.from(fileInput.files || []);
-        const guestName = (guestNameInput?.value || "").trim();
+        const files = Array.from(filesInput.files || []);
+        const guestName = nameInput.value.trim() || "Misafir";
+        const validationError = validateFiles(files);
 
-        if (files.length === 0) {
-            setUploadStatus("📷 Lütfen en az bir fotoğraf veya video seçin.", "error");
-            return;
-        }
-
-        const oversizedFile = files.find(file => file.size > MAX_FILE_SIZE_MB * 1024 * 1024);
-
-        if (oversizedFile) {
-            setUploadStatus(`❌ "${oversizedFile.name}" çok büyük. En fazla ${MAX_FILE_SIZE_MB} MB yükleyebilirsiniz.`, "error");
+        if (validationError) {
+            status.innerHTML = validationError;
+            status.className = "upload-error";
             return;
         }
 
         uploadBtn.disabled = true;
-        uploadBtn.textContent = "Yükleniyor...";
-        setProgress(0);
+        status.className = "";
+        status.innerHTML = `⬆️ Yükleme başladı... 0/${files.length}`;
 
-        const uploadedLinks = [];
+        let successCount = 0;
+        let imageCount = 0;
+        let videoCount = 0;
 
         try {
-            for (let index = 0; index < files.length; index++) {
-                const file = files[index];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                status.innerHTML = `⬆️ Yükleniyor: ${i + 1}/${files.length}<br><small>${file.name}</small>`;
 
-                setUploadStatus(`⬆️ Yükleniyor: ${index + 1}/${files.length}<br><small>${file.name}</small>`, "loading");
+                const cloudinaryResult = await uploadFileToCloudinary(file, guestName);
+                const fileType = getFileType(file);
+                if (fileType === "image") imageCount++;
+                if (fileType === "video") videoCount++;
 
-                const result = await uploadToCloudinary(file, guestName);
-                uploadedLinks.push(result.secure_url);
-
-                await saveUploadRecord({
-                    guestName,
-                    fileUrl: result.secure_url,
-                    fileType: result.resource_type || file.type || "unknown",
-                    fileName: file.name
+                await saveToSupabase({
+                    guest_name: guestName,
+                    file_url: cloudinaryResult.secure_url,
+                    file_type: fileType,
+                    file_name: file.name
                 });
+
+                successCount++;
             }
 
-            setProgress(100);
-
-            const nameText = guestName ? `<br><small>Paylaşım sahibi: ${guestName}</small>` : "";
-
-            setUploadStatus(
-                `❤️ Teşekkür ederiz! ${files.length} dosya başarıyla yüklendi.${nameText}`,
-                "success"
-            );
-
-            fileInput.value = "";
-            if (guestNameInput) guestNameInput.value = "";
+            status.className = "upload-success";
+            status.innerHTML = `❤️ Teşekkür ederiz ${guestName}.<br>${imageCount} fotoğraf, ${videoCount} video başarıyla yüklendi.`;
+            filesInput.value = "";
         } catch (error) {
             console.error(error);
-            setUploadStatus(`❌ ${error.message}`, "error");
+            status.className = "upload-error";
+            status.innerHTML = `❌ Hata: ${error.message}`;
         } finally {
             uploadBtn.disabled = false;
-            uploadBtn.textContent = "❤️ Fotoğraf / Video Yükle";
         }
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    initLoader();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    initPetals();
+    initContinueButton();
+    initUpload();
+});
