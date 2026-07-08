@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function createPetal() {
         if (!petals) return;
+
         const petal = document.createElement("div");
         petal.innerHTML = "🌸";
         petal.style.position = "fixed";
@@ -69,102 +70,116 @@ document.addEventListener("DOMContentLoaded", () => {
         petal.style.pointerEvents = "none";
         petal.style.zIndex = "2";
         petal.style.animation = `fall ${6 + Math.random() * 4}s linear forwards`;
+
         petals.appendChild(petal);
-        setTimeout(() => petal.remove(), 10000);
+
+        setTimeout(() => {
+            petal.remove();
+        }, 10000);
     }
 
     setInterval(createPetal, 500);
 
     const continueBtn = document.getElementById("continueBtn");
+
     if (continueBtn) {
         continueBtn.addEventListener("click", () => {
             const target = document.querySelector(".events");
+
             if (target) {
-                target.scrollIntoView({ behavior: "smooth", block: "start" });
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
             }
         });
     }
 
-const CLOUD_NAME = "z9n2qxfo";
-const UPLOAD_PRESET = "wedding_upload";
-const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
-const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
+    const CLOUD_NAME = "z9n2qxfo";
+    const UPLOAD_PRESET = "wedding_upload";
+    const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
 
-const uploadBtn = document.getElementById("uploadBtn");
-const filesInput = document.getElementById("mediaFiles");
-const guestNameInput = document.getElementById("guestName");
-const status = document.getElementById("uploadStatus");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const filesInput = document.getElementById("mediaFiles");
+    const guestNameInput = document.getElementById("guestName");
+    const status = document.getElementById("uploadStatus");
 
-function setStatus(message) {
-    status.innerHTML = message;
-}
+    function setStatus(message) {
+        if (status) status.innerHTML = message;
+    }
 
-if (uploadBtn) {
-    uploadBtn.addEventListener("click", async () => {
-        const files = Array.from(filesInput.files || []);
-        const guestName = (guestNameInput.value || "İsimsiz").trim();
+    if (uploadBtn) {
+        uploadBtn.addEventListener("click", async () => {
+            try {
+                const files = Array.from(filesInput.files || []);
+                const guestName = (guestNameInput.value || "İsimsiz").trim();
 
-        if (files.length === 0) {
-            setStatus("📷 Lütfen dosya seç.");
-            return;
-        }
-
-        setStatus("⬆️ Yükleniyor...");
-
-        for (const file of files) {
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", UPLOAD_PRESET);
-            formData.append("folder", "fatih-rumeysa");
-
-            const cloudRes = await fetch(
-                `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
-                {
-                    method: "POST",
-                    body: formData
+                if (files.length === 0) {
+                    setStatus("📷 Lütfen dosya seç.");
+                    return;
                 }
-            );
 
-            const cloudData = await cloudRes.json();
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = "Yükleniyor...";
 
-            if (!cloudRes.ok) {
-                setStatus("❌ Cloudinary hatası: " + JSON.stringify(cloudData));
-                return;
-            }
+                setStatus("⬆️ Yükleniyor...");
 
-            const saveRes = await fetch(
-                `${SUPABASE_URL}/rest/v1/wedding_uploads`,
-                {
-                    method: "POST",
-                    headers: {
-                        "apikey": SUPABASE_KEY,
-                        "Authorization": `Bearer ${SUPABASE_KEY}`,
-                        "Content-Type": "application/json",
-                        "Prefer": "return=minimal"
-                    },
-                    body: JSON.stringify({
-                        guest_name: guestName,
-                        file_url: cloudData.secure_url,
-                        file_type: file.type.startsWith("video") ? "video" : "image",
-                        file_name: file.name
-                    })
+                for (const file of files) {
+                    const formData = new FormData();
+
+                    formData.append("file", file);
+                    formData.append("upload_preset", UPLOAD_PRESET);
+                    formData.append("folder", "fatih-rumeysa");
+
+                    const cloudRes = await fetch(
+                        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                    const cloudData = await cloudRes.json();
+
+                    if (!cloudRes.ok) {
+                        setStatus("❌ Cloudinary hatası: " + JSON.stringify(cloudData));
+                        return;
+                    }
+
+                    const saveRes = await fetch(
+                        `${SUPABASE_URL}/rest/v1/wedding_uploads`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "apikey": SUPABASE_KEY,
+                                "Authorization": `Bearer ${SUPABASE_KEY}`,
+                                "Content-Type": "application/json",
+                                "Prefer": "return=minimal"
+                            },
+                            body: JSON.stringify({
+                                guest_name: guestName,
+                                file_url: cloudData.secure_url,
+                                file_type: file.type.startsWith("video") ? "video" : "image",
+                                file_name: file.name
+                            })
+                        }
+                    );
+
+                    if (!saveRes.ok) {
+                        const err = await saveRes.text();
+                        setStatus("❌ Supabase kayıt hatası: " + err);
+                        return;
+                    }
                 }
-            );
 
-            if (!saveRes.ok) {
-                const err = await saveRes.text();
-                setStatus("❌ Supabase kayıt hatası: " + err);
-                return;
-            }
-        }
+                setStatus("❤️ Yükleme tamamlandı. Teşekkür ederiz!");
+                filesInput.value = "";
 
-        setStatus("❤️ Yükleme tamamlandı. Teşekkür ederiz!");
-        filesInput.value = "";
-    });
-}
             } catch (error) {
                 console.error(error);
-                setStatus(`❌ ${error.message}`, "error");
+                setStatus("❌ " + error.message);
+
             } finally {
                 uploadBtn.disabled = false;
                 uploadBtn.textContent = "❤️ Fotoğraf / Video Yükle";
