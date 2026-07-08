@@ -109,7 +109,7 @@ if (continueBtn) {
     });
 
 }
-cconsole.log("Upload kodu yüklendi");
+console.log("Upload kodu yüklendi");
 
 const uploadBtn = document.getElementById("uploadBtn");
 
@@ -124,43 +124,6 @@ if (uploadBtn) {
         console.log("BUTONA BASILDI");
 
         alert("Çalıştı");
-
-    });
-
-}
-        }
-
-        status.innerHTML = "⬆️ Yükleniyor...";
-
-        for (const file of files) {
-
-            const formData = new FormData();
-
-            formData.append("file", file);
-            formData.append("upload_preset", "wedding_upload");
-            formData.append("folder", "fatih-rumeysa");
-            formData.append("context", `guest=${guestName}`);
-
-           const response = await fetch(
-    "https://api.cloudinary.com/v1_1/z9n2qxfo/auto/upload",
-    {
-        method: "POST",
-        body: formData
-    }
-);
-
-const result = await response.json();
-console.log(result);
-
-if (!response.ok) {
-    console.error(result);
-    status.innerHTML = "❌ " + (result.error?.message || "Yükleme başarısız.");
-    return;
-}
-        }
-
-        status.innerHTML =
-            "❤️ Teşekkür ederiz! Fotoğraf ve videolar başarıyla yüklendi.";
 
     });
 
