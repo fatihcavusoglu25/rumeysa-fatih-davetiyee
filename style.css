@@ -684,6 +684,8 @@ color:#caa14b;
 
 }
 
+.arabic-verse{
+
 font-family:"Amiri",serif;
 
 }
@@ -1418,65 +1420,144 @@ transform:translateY(8px);
 }
 
 }
+
+/* ===========================
+   ANILARI PAYLAŞ / UPLOAD
+=========================== */
+
 .upload-section{
+    padding:100px 20px 70px;
+    text-align:center;
+}
 
-max-width:700px;
-margin:80px auto;
-padding:35px;
+.upload-card{
+    max-width:760px;
+    margin:auto;
+    padding:45px 35px;
+    background:rgba(255,255,255,.78);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-radius:34px;
+    border:1px solid rgba(255,255,255,.7);
+    box-shadow:0 20px 55px rgba(0,0,0,.08);
+}
 
-background:rgba(255,255,255,.12);
-backdrop-filter:blur(20px);
-
-border-radius:25px;
-
-text-align:center;
-
-border:1px solid rgba(255,255,255,.15);
-
+.upload-icon{
+    font-size:54px;
+    margin-bottom:12px;
 }
 
 .upload-section h2{
+    font-size:40px;
+    margin-bottom:18px;
+    font-family:'Cormorant Garamond',serif;
+}
 
-font-size:34px;
-
-margin-bottom:20px;
-
+.upload-section p{
+    max-width:560px;
+    margin:0 auto 25px;
+    font-size:18px;
+    line-height:1.8;
+    color:#666;
 }
 
 .upload-section input{
+    width:100%;
+    padding:16px;
+    margin:12px 0;
+    border:none;
+    border-radius:18px;
+    font-size:16px;
+    background:rgba(255,255,255,.9);
+    box-shadow:inset 0 0 0 1px rgba(176,141,87,.18);
+}
 
-width:100%;
-
-padding:16px;
-
-margin:12px 0;
-
-border:none;
-
-border-radius:15px;
-
-font-size:16px;
-
+.upload-section input[type="file"]{
+    cursor:pointer;
 }
 
 .upload-section button{
+    margin-top:14px;
+    padding:18px 35px;
+    border:none;
+    border-radius:50px;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:600;
+    color:#fff;
+    background:linear-gradient(135deg,#b08d57,#d4af37);
+    box-shadow:0 15px 35px rgba(176,141,87,.35);
+    transition:.35s;
+}
 
-padding:18px 35px;
+.upload-section button:hover{
+    transform:translateY(-4px);
+    box-shadow:0 20px 45px rgba(176,141,87,.45);
+}
 
-border:none;
+.upload-section button:disabled{
+    opacity:.7;
+    cursor:not-allowed;
+    transform:none;
+}
 
-border-radius:18px;
+.upload-progress-wrap{
+    width:100%;
+    height:12px;
+    margin:24px 0 12px;
+    background:rgba(176,141,87,.18);
+    border-radius:999px;
+    overflow:hidden;
+}
 
-cursor:pointer;
-
-font-size:18px;
-
+.upload-progress-bar{
+    width:0;
+    height:100%;
+    background:linear-gradient(90deg,#b08d57,#d4af37);
+    border-radius:999px;
+    transition:.25s;
 }
 
 #uploadStatus{
+    margin-top:18px;
+    font-weight:600;
+    line-height:1.7;
+}
 
-margin-top:20px;
+#uploadStatus.success{
+    color:#4b8b45;
+}
 
-font-weight:bold;
+#uploadStatus.error{
+    color:#b00020;
+}
 
+#uploadStatus.loading{
+    color:#8f6f3d;
+}
+
+#uploadStatus small{
+    font-weight:400;
+    color:#777;
+}
+
+@media(max-width:768px){
+    .upload-section{
+        padding:70px 16px 45px;
+    }
+
+    .upload-card{
+        padding:34px 22px;
+        border-radius:28px;
+    }
+
+    .upload-section h2{
+        font-size:32px;
+    }
+
+    .upload-section button{
+        width:100%;
+        font-size:17px;
+        padding:17px 20px;
+    }
 }
