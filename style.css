@@ -684,8 +684,6 @@ color:#caa14b;
 
 }
 
-.arabic-verse{
-
 font-family:"Amiri",serif;
 
 }
@@ -1420,25 +1418,87 @@ transform:translateY(8px);
 }
 
 }
+.upload-section{
+
+max-width:700px;
+margin:80px auto;
+padding:35px;
+
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(20px);
+
+border-radius:25px;
+
+text-align:center;
+
+border:1px solid rgba(255,255,255,.15);
+
+}
+
+.upload-section h2{
+
+font-size:34px;
+
+margin-bottom:20px;
+
+}
+
+.upload-section input{
+
+width:100%;
+
+padding:16px;
+
+margin:12px 0;
+
+border:none;
+
+border-radius:15px;
+
+font-size:16px;
+
+}
+
+.upload-section button{
+
+padding:18px 35px;
+
+border:none;
+
+border-radius:18px;
+
+cursor:pointer;
+
+font-size:18px;
+
+}
+
+#uploadStatus{
+
+margin-top:20px;
+
+font-weight:bold;
+
+}
+
 
 /* ===========================
-   ANILARI PAYLAŞ / UPLOAD
+   ANILAR UPLOAD PREMIUM
 =========================== */
-
 .upload-section{
-    padding:100px 20px 70px;
+    max-width:760px;
+    margin:90px auto 70px;
+    padding:0 20px;
     text-align:center;
 }
 
 .upload-card{
-    max-width:760px;
-    margin:auto;
-    padding:45px 35px;
     background:rgba(255,255,255,.78);
     backdrop-filter:blur(20px);
     -webkit-backdrop-filter:blur(20px);
-    border-radius:34px;
-    border:1px solid rgba(255,255,255,.7);
+    border:1px solid rgba(255,255,255,.85);
+    border-radius:35px;
+    padding:45px;
     box-shadow:0 20px 55px rgba(0,0,0,.08);
 }
 
@@ -1447,117 +1507,80 @@ transform:translateY(8px);
     margin-bottom:12px;
 }
 
-.upload-section h2{
-    font-size:40px;
-    margin-bottom:18px;
+.upload-card h2{
     font-family:'Cormorant Garamond',serif;
+    font-size:42px;
+    margin-bottom:18px;
 }
 
-.upload-section p{
-    max-width:560px;
-    margin:0 auto 25px;
+.upload-card p{
     font-size:18px;
     line-height:1.8;
-    color:#666;
+    margin-bottom:25px;
+    color:#665642;
 }
 
-.upload-section input{
+.upload-card input{
     width:100%;
-    padding:16px;
-    margin:12px 0;
-    border:none;
+    padding:17px;
+    margin:11px 0;
     border-radius:18px;
+    border:1px solid rgba(176,141,87,.25);
+    background:#fffaf2;
     font-size:16px;
-    background:rgba(255,255,255,.9);
-    box-shadow:inset 0 0 0 1px rgba(176,141,87,.18);
+    outline:none;
 }
 
-.upload-section input[type="file"]{
-    cursor:pointer;
+.upload-card input:focus{
+    border-color:#b08d57;
+    box-shadow:0 0 0 4px rgba(176,141,87,.12);
 }
 
-.upload-section button{
-    margin-top:14px;
-    padding:18px 35px;
+.upload-card button{
+    margin-top:15px;
+    padding:17px 35px;
     border:none;
-    border-radius:50px;
-    cursor:pointer;
+    border-radius:999px;
+    background:linear-gradient(135deg,#b08d57,#d4af37);
+    color:white;
     font-size:18px;
     font-weight:600;
-    color:#fff;
-    background:linear-gradient(135deg,#b08d57,#d4af37);
-    box-shadow:0 15px 35px rgba(176,141,87,.35);
-    transition:.35s;
+    cursor:pointer;
+    box-shadow:0 14px 35px rgba(176,141,87,.32);
 }
 
-.upload-section button:hover{
-    transform:translateY(-4px);
-    box-shadow:0 20px 45px rgba(176,141,87,.45);
-}
-
-.upload-section button:disabled{
-    opacity:.7;
+.upload-card button:disabled{
+    opacity:.6;
     cursor:not-allowed;
-    transform:none;
 }
 
-.upload-progress-wrap{
-    width:100%;
-    height:12px;
-    margin:24px 0 12px;
-    background:rgba(176,141,87,.18);
-    border-radius:999px;
-    overflow:hidden;
-}
-
-.upload-progress-bar{
-    width:0;
-    height:100%;
-    background:linear-gradient(90deg,#b08d57,#d4af37);
-    border-radius:999px;
-    transition:.25s;
+.upload-hint{
+    margin-top:16px;
+    font-size:13px;
+    color:#8a7b67;
 }
 
 #uploadStatus{
-    margin-top:18px;
+    margin-top:22px;
     font-weight:600;
     line-height:1.7;
+    color:#7b5d2d;
 }
 
-#uploadStatus.success{
-    color:#4b8b45;
+.upload-success{
+    color:#2f7d32 !important;
 }
 
-#uploadStatus.error{
-    color:#b00020;
-}
-
-#uploadStatus.loading{
-    color:#8f6f3d;
-}
-
-#uploadStatus small{
-    font-weight:400;
-    color:#777;
+.upload-error{
+    color:#b3261e !important;
 }
 
 @media(max-width:768px){
-    .upload-section{
-        padding:70px 16px 45px;
-    }
-
     .upload-card{
-        padding:34px 22px;
-        border-radius:28px;
+        padding:32px 22px;
     }
 
-    .upload-section h2{
-        font-size:32px;
-    }
-
-    .upload-section button{
-        width:100%;
-        font-size:17px;
-        padding:17px 20px;
+    .upload-card h2{
+        font-size:34px;
     }
 }
