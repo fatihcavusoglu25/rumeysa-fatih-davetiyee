@@ -109,21 +109,25 @@ if (continueBtn) {
     });
 
 }
-console.log("Upload kodu yüklendi");
+cconsole.log("Upload kodu yüklendi");
 
 const uploadBtn = document.getElementById("uploadBtn");
 
+console.log(uploadBtn);
+
 if (uploadBtn) {
+
+    console.log("Upload butonu bulundu");
 
     uploadBtn.addEventListener("click", async () => {
 
-        const files = document.getElementById("mediaFiles").files;
-        const guestName = document.getElementById("guestName").value;
-        const status = document.getElementById("uploadStatus");
+        console.log("BUTONA BASILDI");
 
-        if (files.length === 0) {
-            status.innerHTML = "📷 Lütfen en az bir dosya seçin.";
-            return;
+        alert("Çalıştı");
+
+    });
+
+}
         }
 
         status.innerHTML = "⬆️ Yükleniyor...";
