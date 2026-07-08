@@ -3,271 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fatih Admin | Yüklenen Anılar</title>
+    <title>Fatih Admin | Düğün Anıları</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         *{box-sizing:border-box;margin:0;padding:0}
-        :root{--gold:#b08d57;--gold2:#d4af37;--dark:#3f3527;--muted:#746957;--card:rgba(255,255,255,.82)}
-        body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top left,#fff8ea,#f7f3eb 45%,#f3eee5);color:var(--dark);min-height:100vh;padding:24px}
-        body::before{content:"";position:fixed;inset:0;background:url("https://www.transparenttextures.com/patterns/paper-fibers.png");opacity:.11;pointer-events:none;z-index:-1}
-        .wrap{max-width:1280px;margin:auto}
-        .login{min-height:calc(100vh - 48px);display:flex;align-items:center;justify-content:center}
-        .login-card,.hero,.panel{background:var(--card);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.8);box-shadow:0 20px 55px rgba(0,0,0,.08);border-radius:32px}
-        .login-card{width:min(460px,100%);padding:34px;text-align:center}
-        h1,h2{font-family:'Cormorant Garamond',serif;background:linear-gradient(90deg,#8c6a31,#d8b76d,#8c6a31);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        h1{font-size:48px;margin-bottom:8px}.login-card h1{font-size:42px}
-        .muted{color:var(--muted);line-height:1.7}.small{font-size:13px;color:var(--muted)}
-        input,select{width:100%;border:1px solid #ead8ae;border-radius:18px;background:#fffaf2;padding:14px 16px;font-family:inherit;font-size:15px;color:var(--dark);outline:none}
-        input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(176,141,87,.12)}
-        .login-card input{margin:22px 0 12px;text-align:center;font-size:18px}
-        button,.btn{border:none;border-radius:999px;padding:13px 22px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:white;font-weight:700;cursor:pointer;text-decoration:none;box-shadow:0 12px 26px rgba(176,141,87,.24);display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
-        button.secondary,.btn.secondary{background:#fffaf2;color:#8c6a31;border:1px solid #ead8ae}.danger{background:linear-gradient(135deg,#9b3a28,#d8705b)}
-        button:disabled{opacity:.6;cursor:not-allowed}
-        .hero{padding:30px;margin-bottom:18px;text-align:center}
-        .topbar{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:20px 0}
-        .stat{background:#fffaf2;border:1px solid #ead8ae;border-radius:22px;padding:18px;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.045)}
-        .stat strong{display:block;font-size:34px;color:#9b7438}.stat span{font-size:14px;color:var(--muted)}
-        .panel{padding:18px;margin-bottom:18px}.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
-        .section-title{font-size:32px;margin:8px 0 14px}.guest-list{display:grid;gap:14px}
-        .guest-card{background:rgba(255,255,255,.86);border:1px solid rgba(255,255,255,.9);border-radius:26px;padding:18px;box-shadow:0 14px 35px rgba(0,0,0,.06)}
-        .guest-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-        .guest-name{font-size:22px;font-weight:800;color:#7b5a2e}.guest-meta{display:flex;gap:8px;flex-wrap:wrap}
-        .pill{background:#fff3d4;color:#7b5a2e;border:1px solid #ead8ae;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:700}
-        .media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-        .media{background:#fffaf2;border:1px solid #ead8ae;border-radius:20px;overflow:hidden}.thumb{height:145px;background:#f0e4cf;display:flex;align-items:center;justify-content:center;overflow:hidden}
-        .thumb img,.thumb video{width:100%;height:100%;object-fit:cover}.media-info{padding:11px}.file{font-size:12px;color:#685b49;word-break:break-word;line-height:1.45}.date{font-size:12px;color:#8a7c68;margin-top:5px}.media-actions{display:flex;gap:8px;margin-top:10px}.media-actions a{font-size:12px;color:#9b7438;text-decoration:none;font-weight:800}
-        .empty{background:rgba(255,255,255,.8);border-radius:24px;padding:40px;text-align:center;color:#776b5b}.toast{position:fixed;right:18px;bottom:18px;background:#fffaf2;border:1px solid #ead8ae;border-radius:18px;padding:14px 18px;box-shadow:0 16px 42px rgba(0,0,0,.12);display:none;z-index:50}.toast.show{display:block}
-        .hidden{display:none!important}
-        @media(max-width:700px){body{padding:14px}h1{font-size:36px}.hero{padding:22px}.filters{grid-template-columns:1fr}.media-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr))}.thumb{height:125px}.guest-name{font-size:19px}.topbar button,.topbar .btn{width:100%}}
+        body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top left,#fff8ea,#f7f3eb 45%,#f3eee5);color:#42372a;min-height:100vh;padding:24px}
+        .wrap{max-width:1180px;margin:auto}
+        .login,.panel{background:rgba(255,255,255,.78);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.8);border-radius:32px;box-shadow:0 20px 55px rgba(0,0,0,.08)}
+        .login{max-width:440px;margin:12vh auto;padding:36px;text-align:center}
+        h1{font-family:'Cormorant Garamond',serif;font-size:44px;color:#8c6a31;margin-bottom:10px}
+        .login p{color:#76664f;margin-bottom:22px;line-height:1.7}
+        input,button{font-family:inherit}
+        .login input,.search{width:100%;padding:16px;border-radius:16px;border:1px solid rgba(176,141,87,.25);background:#fffaf2;outline:none;font-size:16px}
+        .login button,.refresh{width:100%;margin-top:14px;padding:16px;border:none;border-radius:999px;background:linear-gradient(135deg,#b08d57,#d4af37);color:white;font-weight:600;font-size:16px;cursor:pointer;box-shadow:0 14px 30px rgba(176,141,87,.28)}
+        .panel{display:none;padding:26px}
+        .top{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+        .top h1{margin:0}.top p{color:#776a59}.logout{background:#fff1ea;color:#9c3d2f;border:1px solid #ffd4c7;padding:12px 18px;border-radius:999px;cursor:pointer}
+        .stats{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:14px;margin:22px 0}
+        .stat{background:#fffaf2;border:1px solid rgba(176,141,87,.18);border-radius:22px;padding:18px;box-shadow:0 10px 24px rgba(0,0,0,.04)}
+        .stat span{display:block;color:#7d6c55;font-size:13px}.stat strong{font-size:28px;color:#8c6a31}
+        .tools{display:flex;gap:12px;margin:18px 0;align-items:center}.refresh{width:auto;margin:0;padding:14px 22px}.search{flex:1}
+        .guest{background:rgba(255,255,255,.72);border:1px solid rgba(176,141,87,.16);border-radius:24px;margin:14px 0;overflow:hidden}
+        .guest-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 20px;background:#fffaf2;cursor:pointer}
+        .guest-name{font-weight:700;font-size:18px;color:#6f5427}.guest-meta{color:#7d6c55;font-size:14px}.files{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;padding:16px;display:none}.guest.open .files{display:grid}
+        .file{border-radius:18px;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.06)}
+        .thumb{height:130px;background:#f1e8d8;display:flex;align-items:center;justify-content:center;font-size:42px;color:#9b7438}.thumb img,.thumb video{width:100%;height:100%;object-fit:cover}
+        .file-info{padding:10px;font-size:12px;color:#665642;word-break:break-word}.file-info a{display:inline-block;margin-top:8px;color:#8c6a31;font-weight:600;text-decoration:none}
+        .empty{text-align:center;padding:36px;color:#7d6c55}.err{color:#b3261e;margin-top:12px}.ok{color:#2f7d32;margin-top:12px}
+        @media(max-width:760px){body{padding:12px}.stats{grid-template-columns:repeat(2,1fr)}.tools{flex-direction:column}.refresh{width:100%}.top{display:block}.logout{margin-top:12px}.panel{padding:16px}h1{font-size:36px}}
     </style>
 </head>
 <body>
-    <div id="loginScreen" class="login">
-        <div class="login-card">
-            <h1>👑 Fatih Admin</h1>
-            <p class="muted">Yüklenen fotoğraf ve videoları görmek için şifre gir.</p>
-            <input id="passwordInput" type="password" placeholder="Admin şifresi">
-            <button id="loginBtn">Panele Gir</button>
-            <p id="loginError" class="small" style="margin-top:12px;color:#9b3a28"></p>
-            <p class="small" style="margin-top:18px">Varsayılan şifre: <b>250825</b> — dosya içinden değiştirebilirsin.</p>
-        </div>
-    </div>
+    <div class="wrap">
+        <section class="login" id="loginBox">
+            <h1>👑 Admin Paneli</h1>
+            <p>Yüklenen fotoğraf ve videoları görmek için şifreyi gir.</p>
+            <input id="password" type="password" placeholder="Şifre">
+            <button id="loginBtn">Giriş Yap</button>
+            <div id="loginMsg" class="err"></div>
+        </section>
 
-    <main id="adminApp" class="wrap hidden">
-        <section class="hero">
-            <h1>📸 Yüklenen Anılar</h1>
-            <p class="muted">Misafirlerin yüklediği fotoğraf ve videolar burada isimlerine göre gruplanır.</p>
+        <section class="panel" id="panel">
+            <div class="top">
+                <div>
+                    <h1>📸 Düğün Anıları</h1>
+                    <p>Yükleyen isimleri, fotoğraflar ve videolar burada listelenir.</p>
+                </div>
+                <button class="logout" id="logoutBtn">Çıkış</button>
+            </div>
+
             <div class="stats">
-                <div class="stat"><strong id="totalCount">0</strong><span>Toplam Dosya</span></div>
-                <div class="stat"><strong id="photoCount">0</strong><span>Fotoğraf</span></div>
-                <div class="stat"><strong id="videoCount">0</strong><span>Video</span></div>
-                <div class="stat"><strong id="guestCount">0</strong><span>Misafir</span></div>
+                <div class="stat"><span>Misafir</span><strong id="guestCount">0</strong></div>
+                <div class="stat"><span>Fotoğraf</span><strong id="imageCount">0</strong></div>
+                <div class="stat"><span>Video</span><strong id="videoCount">0</strong></div>
+                <div class="stat"><span>Toplam Dosya</span><strong id="fileCount">0</strong></div>
             </div>
-            <div class="topbar">
-                <button id="refreshBtn">🔄 Yenile</button>
-                <button id="downloadZipBtn" class="secondary">⬇️ Hepsini ZIP indir</button>
-                <a class="btn secondary" href="index.html#upload">Yükleme Sayfası</a>
-                <button id="logoutBtn" class="danger">Çıkış</button>
+
+            <div class="tools">
+                <input class="search" id="search" placeholder="İsme göre ara...">
+                <button class="refresh" id="refreshBtn">Yenile</button>
             </div>
-            <p class="small" id="lastUpdate" style="margin-top:14px"></p>
-        </section>
 
-        <section class="panel">
-            <div class="filters">
-                <input id="searchInput" type="search" placeholder="🔎 İsim veya dosya adı ara...">
-                <select id="typeFilter">
-                    <option value="all">Tümü</option>
-                    <option value="photo">Sadece fotoğraflar</option>
-                    <option value="video">Sadece videolar</option>
-                </select>
-                <select id="sortFilter">
-                    <option value="newest">En yeni önce</option>
-                    <option value="oldest">En eski önce</option>
-                    <option value="guest">İsme göre</option>
-                </select>
-            </div>
+            <div id="list" class="empty">Yükleniyor...</div>
         </section>
-
-        <section class="panel">
-            <h2 class="section-title">Misafirler</h2>
-            <div id="guestList" class="guest-list"></div>
-        </section>
-    </main>
-
-    <div id="toast" class="toast"></div>
+    </div>
 
 <script>
 const ADMIN_PASSWORD = "250825";
 const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
 const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
-
-const loginScreen = document.getElementById("loginScreen");
-const adminApp = document.getElementById("adminApp");
-const passwordInput = document.getElementById("passwordInput");
-const loginBtn = document.getElementById("loginBtn");
-const loginError = document.getElementById("loginError");
-const refreshBtn = document.getElementById("refreshBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-const downloadZipBtn = document.getElementById("downloadZipBtn");
-const searchInput = document.getElementById("searchInput");
-const typeFilter = document.getElementById("typeFilter");
-const sortFilter = document.getElementById("sortFilter");
-const guestList = document.getElementById("guestList");
-const toast = document.getElementById("toast");
 let uploads = [];
 
-function showToast(message){
-    toast.textContent = message;
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 3200);
+const loginBox = document.getElementById("loginBox");
+const panel = document.getElementById("panel");
+const list = document.getElementById("list");
+const search = document.getElementById("search");
+
+function isLoggedIn(){ return localStorage.getItem("wedding_admin") === "yes"; }
+function showPanel(){ loginBox.style.display="none"; panel.style.display="block"; loadUploads(); }
+function showLogin(){ loginBox.style.display="block"; panel.style.display="none"; }
+
+function fileIcon(type){ return type === "video" ? "🎥" : "📸"; }
+function safeName(name){ return (name || "Misafir").trim() || "Misafir"; }
+
+async function loadUploads(){
+    list.className = "empty";
+    list.innerHTML = "Yükleniyor...";
+    try{
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/wedding_uploads?select=*&order=uploaded_at.desc`, {
+            headers:{ apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+        });
+        if(!res.ok) throw new Error(await res.text());
+        uploads = await res.json();
+        render();
+    }catch(err){
+        console.error(err);
+        list.className = "empty err";
+        list.innerHTML = "Veriler alınamadı. Supabase tablo/policy ayarlarını kontrol et.";
+    }
 }
-function isVideo(item){
-    return (item.file_type || "").includes("video") || /\.(mp4|mov|webm|m4v)$/i.test(item.file_name || item.file_url || "");
-}
-function formatDate(value){
-    if(!value) return "";
-    return new Date(value).toLocaleString("tr-TR", { dateStyle:"medium", timeStyle:"short" });
-}
-function safeName(name){
-    return (name || "İsimsiz").trim() || "İsimsiz";
-}
-function setStats(data){
-    document.getElementById("totalCount").textContent = data.length;
-    document.getElementById("photoCount").textContent = data.filter(item => !isVideo(item)).length;
-    document.getElementById("videoCount").textContent = data.filter(isVideo).length;
-    document.getElementById("guestCount").textContent = new Set(data.map(item => safeName(item.guest_name))).size;
-    document.getElementById("lastUpdate").textContent = "Son güncelleme: " + new Date().toLocaleString("tr-TR", { timeStyle:"short", dateStyle:"medium" });
-}
-function getFiltered(){
-    const q = searchInput.value.trim().toLowerCase();
-    const type = typeFilter.value;
-    const sort = sortFilter.value;
-    let data = uploads.filter(item => {
-        const matchesText = !q || safeName(item.guest_name).toLowerCase().includes(q) || (item.file_name || "").toLowerCase().includes(q);
-        const matchesType = type === "all" || (type === "video" ? isVideo(item) : !isVideo(item));
-        return matchesText && matchesType;
-    });
-    data.sort((a,b) => {
-        if(sort === "oldest") return new Date(a.uploaded_at || 0) - new Date(b.uploaded_at || 0);
-        if(sort === "guest") return safeName(a.guest_name).localeCompare(safeName(b.guest_name), "tr");
-        return new Date(b.uploaded_at || 0) - new Date(a.uploaded_at || 0);
-    });
-    return data;
-}
+
 function render(){
-    const data = getFiltered();
-    setStats(uploads);
-    if(data.length === 0){
-        guestList.innerHTML = `<div class="empty">Henüz gösterilecek yükleme yok.</div>`;
+    const q = search.value.toLowerCase().trim();
+    const filtered = uploads.filter(u => safeName(u.guest_name).toLowerCase().includes(q));
+    const groups = new Map();
+    filtered.forEach(u => {
+        const name = safeName(u.guest_name);
+        if(!groups.has(name)) groups.set(name, []);
+        groups.get(name).push(u);
+    });
+
+    const imageCount = filtered.filter(u => u.file_type === "image").length;
+    const videoCount = filtered.filter(u => u.file_type === "video").length;
+    document.getElementById("guestCount").textContent = groups.size;
+    document.getElementById("imageCount").textContent = imageCount;
+    document.getElementById("videoCount").textContent = videoCount;
+    document.getElementById("fileCount").textContent = filtered.length;
+
+    if(!filtered.length){
+        list.className = "empty";
+        list.innerHTML = "Henüz yükleme yok.";
         return;
     }
-    const grouped = data.reduce((acc,item) => {
-        const name = safeName(item.guest_name);
-        if(!acc[name]) acc[name] = [];
-        acc[name].push(item);
-        return acc;
-    }, {});
-    guestList.innerHTML = Object.entries(grouped).map(([name,items]) => {
-        const photoCount = items.filter(item => !isVideo(item)).length;
-        const videoCount = items.filter(isVideo).length;
-        const cards = items.map(item => {
-            const video = isVideo(item);
-            const media = video
-                ? `<video src="${item.file_url}" controls muted preload="metadata"></video>`
-                : `<img src="${item.file_url}" alt="${item.file_name || 'Fotoğraf'}" loading="lazy">`;
-            return `<article class="media">
-                <div class="thumb">${media}</div>
-                <div class="media-info">
-                    <div class="file">${video ? "🎥" : "📸"} ${item.file_name || "Dosya"}</div>
-                    <div class="date">🕒 ${formatDate(item.uploaded_at)}</div>
-                    <div class="media-actions"><a href="${item.file_url}" target="_blank" rel="noopener">Aç / İndir</a></div>
+
+    list.className = "";
+    list.innerHTML = Array.from(groups.entries()).map(([name, items]) => {
+        const img = items.filter(i => i.file_type === "image").length;
+        const vid = items.filter(i => i.file_type === "video").length;
+        const files = items.map(item => {
+            const isVideo = item.file_type === "video";
+            const preview = isVideo
+                ? `<video src="${item.file_url}" controls muted></video>`
+                : `<img src="${item.file_url}" alt="${item.file_name || ''}">`;
+            const date = item.uploaded_at ? new Date(item.uploaded_at).toLocaleString("tr-TR") : "";
+            return `<div class="file">
+                <div class="thumb">${preview}</div>
+                <div class="file-info">
+                    <div>${fileIcon(item.file_type)} ${item.file_name || "Dosya"}</div>
+                    <div>${date}</div>
+                    <a href="${item.file_url}" target="_blank" download>İndir / Aç</a>
                 </div>
-            </article>`;
+            </div>`;
         }).join("");
-        return `<article class="guest-card">
-            <div class="guest-head">
-                <div class="guest-name">👤 ${name}</div>
-                <div class="guest-meta">
-                    <span class="pill">${items.length} dosya</span>
-                    <span class="pill">📸 ${photoCount}</span>
-                    <span class="pill">🎥 ${videoCount}</span>
+        return `<div class="guest">
+            <div class="guest-head" onclick="this.parentElement.classList.toggle('open')">
+                <div>
+                    <div class="guest-name">👤 ${name}</div>
+                    <div class="guest-meta">📸 ${img} fotoğraf • 🎥 ${vid} video</div>
                 </div>
+                <div>Göster ↓</div>
             </div>
-            <div class="media-grid">${cards}</div>
-        </article>`;
+            <div class="files">${files}</div>
+        </div>`;
     }).join("");
 }
-async function loadUploads(){
-    guestList.innerHTML = `<div class="empty">Yüklemeler getiriliyor...</div>`;
-    try{
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/wedding_uploads?select=*&order=uploaded_at.desc`, {
-            headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
-        });
-        if(!response.ok){
-            throw new Error(await response.text());
-        }
-        uploads = await response.json();
-        render();
-    }catch(error){
-        console.error(error);
-        guestList.innerHTML = `<div class="empty">Kayıtlar getirilemedi. Supabase SQL policy ayarlarını kontrol et.</div>`;
+
+document.getElementById("loginBtn").addEventListener("click", () => {
+    const pass = document.getElementById("password").value;
+    if(pass === ADMIN_PASSWORD){
+        localStorage.setItem("wedding_admin", "yes");
+        showPanel();
+    }else{
+        document.getElementById("loginMsg").textContent = "Şifre hatalı.";
     }
-}
-async function downloadAllAsZip(){
-    if(!uploads.length){ showToast("İndirilecek dosya yok."); return; }
-    if(typeof JSZip === "undefined"){
-        showToast("ZIP kütüphanesi yüklenemedi. Dosyaları tek tek açıp indirebilirsin.");
-        return;
-    }
-    downloadZipBtn.disabled = true;
-    downloadZipBtn.textContent = "ZIP hazırlanıyor...";
-    try{
-        const zip = new JSZip();
-        for(let i=0;i<uploads.length;i++){
-            const item = uploads[i];
-            const name = safeName(item.guest_name).replace(/[^a-z0-9ığüşöçİĞÜŞÖÇ\-_ ]/gi,"_");
-            const ext = (item.file_name || item.file_url || "dosya").split(".").pop().split("?")[0] || "jpg";
-            const fileName = `${name}/${String(i+1).padStart(3,"0")}-${item.file_name || "ani."+ext}`;
-            const res = await fetch(item.file_url);
-            const blob = await res.blob();
-            zip.file(fileName, blob);
-        }
-        const content = await zip.generateAsync({type:"blob"});
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(content);
-        a.download = "rumeysa-fatih-anilar.zip";
-        a.click();
-        URL.revokeObjectURL(a.href);
-        showToast("ZIP indiriliyor.");
-    }catch(error){
-        console.error(error);
-        showToast("ZIP hazırlanamadı. Dosyaları kartlardan tek tek indirebilirsin.");
-    }finally{
-        downloadZipBtn.disabled = false;
-        downloadZipBtn.textContent = "⬇️ Hepsini ZIP indir";
-    }
-}
-function unlock(){
-    loginScreen.classList.add("hidden");
-    adminApp.classList.remove("hidden");
-    localStorage.setItem("weddingAdminUnlocked", "yes");
-    loadUploads();
-}
-loginBtn.addEventListener("click", () => {
-    if(passwordInput.value === ADMIN_PASSWORD){ unlock(); }
-    else{ loginError.textContent = "Şifre yanlış."; }
 });
-passwordInput.addEventListener("keydown", e => { if(e.key === "Enter") loginBtn.click(); });
-logoutBtn.addEventListener("click", () => { localStorage.removeItem("weddingAdminUnlocked"); location.reload(); });
-refreshBtn.addEventListener("click", loadUploads);
-downloadZipBtn.addEventListener("click", downloadAllAsZip);
-[searchInput,typeFilter,sortFilter].forEach(el => el.addEventListener("input", render));
-if(localStorage.getItem("weddingAdminUnlocked") === "yes") unlock();
-setInterval(() => { if(!adminApp.classList.contains("hidden")) loadUploads(); }, 15000);
+
+document.getElementById("password").addEventListener("keydown", e => {
+    if(e.key === "Enter") document.getElementById("loginBtn").click();
+});
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("wedding_admin");
+    showLogin();
+});
+
+document.getElementById("refreshBtn").addEventListener("click", loadUploads);
+search.addEventListener("input", render);
+
+if(isLoggedIn()) showPanel(); else showLogin();
 </script>
 </body>
 </html>
