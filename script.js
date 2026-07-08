@@ -116,6 +116,9 @@ const CLOUDINARY_CLOUD_NAME = "z9n2qxfo";
 const CLOUDINARY_UPLOAD_PRESET = "wedding_upload";
 const MAX_FILE_SIZE_MB = 100;
 
+const SUPABASE_URL = "https://ocbxkepptjbaoqwvrzuw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_1Wz11hgmmieGxZcfjWJzIA_vUDzBsEN";
+
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("mediaFiles");
 const guestNameInput = document.getElementById("guestName");
@@ -135,13 +138,17 @@ function setProgress(percent) {
     progressBar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
 }
 
-function uploadToCloudinary(file) {
+function uploadToCloudinary(file, guestName = "") {
     return new Promise((resolve, reject) => {
         const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
         const formData = new FormData();
 
         formData.append("file", file);
         formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+        if (guestName) {
+            formData.append("context", `guest=${guestName}`);
+        }
 
         const xhr = new XMLHttpRequest();
         xhr.open("POST", url);
@@ -178,6 +185,29 @@ function uploadToCloudinary(file) {
     });
 }
 
+async function saveUploadRecord({ guestName, fileUrl, fileType, fileName }) {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/wedding_uploads`, {
+        method: "POST",
+        headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+            guest_name: guestName || "İsimsiz",
+            file_url: fileUrl,
+            file_type: fileType || "unknown",
+            file_name: fileName || ""
+        })
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Supabase kaydı yapılamadı: ${errorText}`);
+    }
+}
+
 if (uploadBtn && fileInput) {
     uploadBtn.addEventListener("click", async () => {
         const files = Array.from(fileInput.files || []);
@@ -207,8 +237,15 @@ if (uploadBtn && fileInput) {
 
                 setUploadStatus(`⬆️ Yükleniyor: ${index + 1}/${files.length}<br><small>${file.name}</small>`, "loading");
 
-                const result = await uploadToCloudinary(file);
+                const result = await uploadToCloudinary(file, guestName);
                 uploadedLinks.push(result.secure_url);
+
+                await saveUploadRecord({
+                    guestName,
+                    fileUrl: result.secure_url,
+                    fileType: result.resource_type || file.type || "unknown",
+                    fileName: file.name
+                });
             }
 
             setProgress(100);
