@@ -173,9 +173,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                setStatus("❤️ Yükleme tamamlandı. Teşekkür ederiz!");
-                filesInput.value = "";
+             const displayName = guestName && guestName !== "İsimsiz"
+    ? guestName
+    : "Değerli misafirimiz";
 
+setStatus(`
+    ❤️ Teşekkür ederiz ${displayName}.<br>
+    Fotoğraf ve videolarınız başarıyla yüklendi.<br>
+    Bu güzel anıları bizimle paylaştığınız için mutluyuz. 🤍
+`);
             } catch (error) {
                 console.error(error);
                 setStatus("❌ " + error.message);
